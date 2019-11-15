@@ -1,32 +1,101 @@
-import React from "react";
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
-import SignUp from "./pages/SignUp";
-import SignIn from "./pages/SignIn";
+/*!
 
-import { isAuthenticated } from "./services/auth";
+=========================================================
+* Material Dashboard React - v1.8.0
+=========================================================
 
-const PrivateRoute = ({ component: Component, ...rest }) => (
-  <Route
-    {...rest}
-    render={props =>
-      isAuthenticated() ? (
-        <Component {...props} />
-      ) : (
-        <Redirect to={{ pathname: "/", state: { from: props.location } }} />
-      )
-    }
-  />
-);
+* Product Page: https://www.creative-tim.com/product/material-dashboard-react
+* Copyright 2019 Creative Tim (https://www.creative-tim.com)
+* Licensed under MIT (https://github.com/creativetimofficial/material-dashboard-react/blob/master/LICENSE.md)
 
-const Routes = () => (
-  <BrowserRouter>
-    <Switch>
-        <Route exact path="/" component={SignIn} />
-        <Route path="/signup" component={SignUp} />
-        <PrivateRoute path="/app" component={() => <h1>App</h1>} />
-        <Route path="*" component={() => <h1>Page not found</h1>} />
-    </Switch>
-  </BrowserRouter>
-);
+* Coded by Creative Tim
 
-export default Routes;
+=========================================================
+
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+*/
+// @material-ui/icons
+import Dashboard from "@material-ui/icons/Dashboard";
+import Person from "@material-ui/icons/Person";
+import EmojiNature from '@material-ui/icons/EmojiNature';
+import LibraryBooks from "@material-ui/icons/LibraryBooks";
+import BubbleChart from "@material-ui/icons/BubbleChart";
+import LocationOn from "@material-ui/icons/LocationOn";
+import Notifications from "@material-ui/icons/Notifications";
+import Unarchive from "@material-ui/icons/Unarchive";
+import Language from "@material-ui/icons/Language";
+// core components/views for Admin layout
+import DashboardPage from "views/Dashboard/Dashboard.js";
+import UserProfile from "views/UserProfile/UserProfile.js";
+import TableList from "views/TableList/TableList.js";
+import Typography from "views/Typography/Typography.js";
+import Icons from "views/Icons/Icons.js";
+import Maps from "views/Maps/Maps.js";
+import NotificationsPage from "views/Notifications/Notifications.js";
+
+const dashboardRoutes = [
+  {
+    path: "/dashboard",
+    name: "Dashboard",
+    icon: Dashboard,
+    component: DashboardPage,
+    layout: "/app"
+  },
+  {
+    path: "/user",
+    name: "Meu Perfil",
+    icon: Person,
+    component: UserProfile,
+    layout: "/app"
+  },
+  {
+    path: "/beehive",
+    name: "Colmeias",
+    icon: EmojiNature,
+    component: Icons,
+    layout: "/app"
+  },
+  /*
+  {
+    path: "/table",
+    name: "Table List",
+    rtlName: "قائمة الجدول",
+    icon: "content_paste",
+    component: TableList,
+    layout: "/admin"
+  },
+  {
+    path: "/typography",
+    name: "Typography",
+    rtlName: "طباعة",
+    icon: LibraryBooks,
+    component: Typography,
+    layout: "/admin"
+  },
+  {
+    path: "/icons",
+    name: "Icons",
+    //icon: BubbleChart,
+    icon: Person,
+    component: Icons,
+    layout: "/app"
+  },
+  {
+    path: "/maps",
+    name: "Maps",
+    icon: LocationOn,
+    component: Maps,
+    layout: "/app"
+  },
+  {
+    path: "/notifications",
+    name: "Notifications",
+    rtlName: "إخطارات",
+    icon: Notifications,
+    component: NotificationsPage,
+    layout: "/admin"
+  }*/
+];
+
+export default dashboardRoutes;

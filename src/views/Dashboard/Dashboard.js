@@ -10,33 +10,50 @@ import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 
 export default function Dashboard() {
+
+  const ua = navigator.userAgent;
+  const isMobile = ua.includes('Mobile');
+
+  /*<Hidden>
+      <GridItem xs={12} sm={12} md={6}>
+        <h5>
+          O painel é visível no modo Desktop, dentro de um iframe. Como o iframe ainda não é suportado por dispositivos móveis e tablets,
+          visite o painel usando suas credenciais na página original disponível
+          <a
+            href="http://10.42.0.1:1234/d/m2T90j1Zz/bee-monitor?orgId=1&kiosk=tv&refresh=1h"
+            target="_blank"
+          > aqui </a>
+          .
+        </h5>
+      </GridItem>
+  </Hidden>*/
+
+  const dashboardView = isMobile ? (
+    <Hidden>
+        <iframe
+            src="http://10.42.0.1:1234/d/m2T90j1Zz/bee-monitor?orgId=1&kiosk=tv&refresh=1h"
+            width="100%"
+            height="750" >
+        </iframe>
+    </Hidden>
+  ) : (
+    <Hidden>
+      <iframe
+          src="http://localhost:1234/d/m2T90j1Zz/bee-monitor?orgId=1&kiosk=tv&refresh=1h"
+          width="100%"
+          height="750" >
+      </iframe>
+    </Hidden>
+  );
+
   return (
     <div>
       <GridContainer>
       <GridItem xs={12} sm={12} md={12}>
         <Card plain>
           <CardBody>
-            <Hidden only={["sm", "xs"]}>
-              <iframe
-                  src="http://localhost:1234/d/m2T90j1Zz/bee-monitor?orgId=1&kiosk=tv&refresh=1h"
-                  width="100%"
-                  height="750" >
-              </iframe>
-            </Hidden>
-            <Hidden only={["lg", "md"]}>
-              <GridItem xs={12} sm={12} md={6}>
-                <h5>
-                  O painel é visível no modo Desktop, dentro de um iframe. Como o iframe ainda não é suportado por dispositivos móveis e tablets,
-                  visite o painel usando suas credenciais na página original disponível
-                  <a
-                    href="http://10.42.0.1:1234/d/m2T90j1Zz/bee-monitor?orgId=1&kiosk=tv&refresh=1h"
-                    target="_blank"
-                  > aqui </a>
-                  .
-                </h5>
-              </GridItem>
-            </Hidden>
-            </CardBody>
+            {dashboardView}
+          </CardBody>
         </Card>
       </GridItem>
     </GridContainer>

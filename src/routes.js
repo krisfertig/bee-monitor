@@ -18,6 +18,8 @@
 // @material-ui/icons
 import Dashboard from "@material-ui/icons/Dashboard";
 import Person from "@material-ui/icons/Person";
+import ExitToApp from "@material-ui/icons/ExitToApp";
+
 /*
 import EmojiNature from '@material-ui/icons/EmojiNature';
 import LibraryBooks from "@material-ui/icons/LibraryBooks";
@@ -30,6 +32,8 @@ import Language from "@material-ui/icons/Language";
 // core components/views for Admin layout
 import DashboardPage from "views/Dashboard/Dashboard.js";
 import UserProfile from "views/UserProfile/UserProfile.js";
+import Logout from "views/Logout/Logout.js";
+
 /*
 import TableList from "views/TableList/TableList.js";
 import Typography from "views/Typography/Typography.js";
@@ -48,11 +52,18 @@ const dashboardRoutes = [
   },
   {
     path: "/user",
-    name: "Meu Perfil",
+    name: "Meus Dados",
     icon: Person,
     component: UserProfile,
     layout: "/app"
   },
+  {
+    path: "/logout",
+    name: "Logout",
+    icon: ExitToApp,
+    component: Logout,
+    layout: "/app"
+  }
   /*
   {
     path: "/beehive",

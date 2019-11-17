@@ -13,6 +13,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Icon from "@material-ui/core/Icon";
 // core components
 import AdminNavbarLinks from "components/Navbars/AdminNavbarLinks.js";
+import Button from "components/CustomButtons/Button.js";
 
 import styles from "assets/jss/material-dashboard-react/components/sidebarStyle.js";
 
@@ -30,7 +31,7 @@ export default function Sidebar(props) {
       {routes.map((prop, key) => {
         var activePro = " ";
         var listItemClasses;
-        if (prop.path === "/upgrade-to-pro") {
+        if (prop.path === "/logout") {
           activePro = classes.activePro + " ";
           listItemClasses = classNames({
             [" " + classes[color]]: true
@@ -114,9 +115,18 @@ export default function Sidebar(props) {
           {brand}
 
           <div className={classes.sidebarWrapper}>
-            {/*<AdminNavbarLinks />*/}
+              {/*<AdminNavbarLinks /> */}
             {links}
           </div>
+
+          <Button
+              color="success"
+              href="https://www.creative-tim.com/product/material-dashboard-react?ref=mdr-fixed-plugin"
+              target="_blank"
+              fullWidth
+            >
+              Logout
+          </Button>
 
           <div
             className={classes.background}

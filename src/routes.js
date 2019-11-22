@@ -43,75 +43,75 @@ import NotificationsPage from "views/Notifications/Notifications.js";
 */
 
 const dashboardRoutes = [
-  {
-    path: "/dashboard",
-    name: "Painel",
-    icon: Dashboard,
-    component: DashboardPage,
-    layout: "/app"
-  },
-  {
-    path: "/user",
-    name: "Meus Dados",
-    icon: Person,
-    component: UserProfile,
-    layout: "/app"
-  },
-  {
-    path: "/logout",
-    name: "Logout",
-    icon: ExitToApp,
-    component: Logout,
-    layout: "/app"
-  }
-  /*
-  {
-    path: "/beehive",
-    name: "Colmeias",
-    icon: EmojiNature,
-    component: Icons,
-    layout: "/app"
-  },
-  /*
-  {
-    path: "/table",
-    name: "Table List",
-    rtlName: "قائمة الجدول",
-    icon: "content_paste",
-    component: TableList,
-    layout: "/admin"
-  },
-  {
-    path: "/typography",
-    name: "Typography",
-    rtlName: "طباعة",
-    icon: LibraryBooks,
-    component: Typography,
-    layout: "/admin"
-  },
-  {
-    path: "/icons",
-    name: "Icons",
-    //icon: BubbleChart,
-    icon: Person,
-    component: Icons,
-    layout: "/app"
-  },
-  {
-    path: "/maps",
-    name: "Maps",
-    icon: LocationOn,
-    component: Maps,
-    layout: "/app"
-  },
-  {
-    path: "/notifications",
-    name: "Notifications",
-    rtlName: "إخطارات",
-    icon: Notifications,
-    component: NotificationsPage,
-    layout: "/admin"
-  }*/
+	{
+		path: "/dashboard",
+		name: "Painel",
+		icon: Dashboard,
+		component: DashboardPage,
+		layout: "/app"
+	},
+	{
+		path: "/user",
+		name: "Meus Dados",
+		icon: Person,
+		component: UserProfile,
+		layout: "/app"
+	},
+	{
+		path: "/logout",
+		name: "Sair",
+		icon: ExitToApp,
+		component: Logout,
+		layout: "/app"
+	}
+	/*
+	{
+	  path: "/beehive",
+	  name: "Colmeias",
+	  icon: EmojiNature,
+	  component: Icons,
+	  layout: "/app"
+	},
+	/*
+	{
+	  path: "/table",
+	  name: "Table List",
+	  rtlName: "قائمة الجدول",
+	  icon: "content_paste",
+	  component: TableList,
+	  layout: "/admin"
+	},
+	{
+	  path: "/typography",
+	  name: "Typography",
+	  rtlName: "طباعة",
+	  icon: LibraryBooks,
+	  component: Typography,
+	  layout: "/admin"
+	},
+	{
+	  path: "/icons",
+	  name: "Icons",
+	  //icon: BubbleChart,
+	  icon: Person,
+	  component: Icons,
+	  layout: "/app"
+	},
+	{
+	  path: "/maps",
+	  name: "Maps",
+	  icon: LocationOn,
+	  component: Maps,
+	  layout: "/app"
+	},
+	{
+	  path: "/notifications",
+	  name: "Notifications",
+	  rtlName: "إخطارات",
+	  icon: Notifications,
+	  component: NotificationsPage,
+	  layout: "/admin"
+	}*/
 ];
 
 export default dashboardRoutes;

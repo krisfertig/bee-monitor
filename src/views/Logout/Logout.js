@@ -5,11 +5,11 @@ import { logout } from "../../services/auth";
 
 export default function Logout() {
 
-  logout();
+	logout();
 
-  return (
-    <Switch>
-      <Redirect to="/" />
-    </Switch>
-  );
+	return (
+		<Switch>
+			<Redirect to="/" />
+		</Switch>
+	);
 }

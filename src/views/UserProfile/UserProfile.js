@@ -1,7 +1,8 @@
 import React from "react";
+
 // @material-ui/core components
 import { withStyles } from "@material-ui/core/styles";
-//import InputLabel from "@material-ui/core/InputLabel";
+
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
@@ -11,13 +12,13 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
+import CircularProgress from '@material-ui/core/CircularProgress';
 
-//import * as ButtonMUI from '@material-ui/core/Button';
 import clsx from 'clsx';
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import IconButton from '@material-ui/core/IconButton';
-import { red, green } from '@material-ui/core/colors';
+import { red, green, lightBlue } from '@material-ui/core/colors';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
 import CloseIcon from '@material-ui/icons/Close';
@@ -63,6 +64,17 @@ const styles = {
 		display: 'flex',
 		alignItems: 'center',
 	},
+
+	wrapper: {
+		margin: "1px",
+		position: 'relative',
+	},
+	buttonProgress: {
+		color: lightBlue[500],
+		top: "10px",
+		right: "50%",
+		position: "relative",
+	},
 };
 
 class UserProfile extends React.Component {
@@ -70,9 +82,10 @@ class UserProfile extends React.Component {
 		super();
 
 		this.handleUserProfileUpdate = this.handleUserProfileUpdate.bind(this);
-		this.handleChange = this.handleChange.bind(this);
-		this.handleCloseFeedbackMsg = this.handleCloseFeedbackMsg.bind(this);
-		this.getFeedbackMessage = this.getFeedbackMessage.bind(this);
+		this.handleInputChange = this.handleInputChange.bind(this);
+		this.handleCloseFeedbackMessage = this.handleCloseFeedbackMessage.bind(this);
+		this.renderFeedbackMessage = this.renderFeedbackMessage.bind(this);
+		this.renderSaveButton = this.renderSaveButton.bind(this);
 
 		this.classes = classes;
 
@@ -88,15 +101,16 @@ class UserProfile extends React.Component {
 			city: "",
 			country: "",
 
-			feedbackMsg: "",
+			feedbackMessage: "",
+			isUpdatingUserProfile: false,
 		};
 	}
 	
 	async handleUserProfileUpdate(e) {
 		e.preventDefault();
+		this.setState({ isUpdatingUserProfile: true });
 
 		const { username, email, firstName, lastName, companyName, companyAddress, companyPostalCode, city, country } = this.state;
-
 		const data = {
 			username,
 			email,
@@ -110,29 +124,39 @@ class UserProfile extends React.Component {
 		};
 		console.log('handleUserProfileUpdate data', data);
 
-		this.setState({ feedbackMsg: "success" });
-
 		try {
 			await api.post("/userProfiles", data);
-			//this.props.history.push("/");
-			this.setState({ feedbackMsg: "success" });
+			this.setState({
+				feedbackMessage: "success",
+				isUpdatingUserProfile: false
+			});
 		} catch (err) {
 			console.log(err);
-			this.setState({ feedbackMsg: "error" });
+			this.setState({
+				feedbackMessage: "error",
+				isUpdatingUserProfile: false
+			});
 		}
 	}
 
-	handleCloseFeedbackMsg() {
-		console.log('handleCloseFeedbackMsg');
-		this.setState({ feedbackMsg: "" });
+	handleCloseFeedbackMessage() {
+		this.setState({ feedbackMessage: "" });
 	}
 
-	getFeedbackMessage() {
-		const classes = this.classes;
-		const { feedbackMsg } = this.state;
+	handleInputChange(event) {
+		const inputElement = event.target;
+		const inputName = inputElement.id;
+		const inputValue = inputElement.value;
 
-		if (!!feedbackMsg) {
-			const type = feedbackMsg;
+		this.setState({ [inputName]: inputValue });
+	}
+
+	renderFeedbackMessage() {
+		const classes = this.classes;
+		const { feedbackMessage } = this.state;
+
+		if (!!feedbackMessage) {
+			const type = feedbackMessage;
 			const Icon = type === 'success' ? CheckCircleIcon : ErrorIcon;
 			const message = type === 'success' ? "Os dados foram salvos com sucesso!" : "Erro ao salvar os dados!";
 
@@ -144,7 +168,7 @@ class UserProfile extends React.Component {
 					}}
 					open={true}
 					autoHideDuration={6000}
-					onClose={this.handleCloseFeedbackMsg}
+					onClose={this.handleCloseFeedbackMessage}
 				>
 					<SnackbarContent
 						className={classes[type]}
@@ -156,7 +180,7 @@ class UserProfile extends React.Component {
 							</span>
 						}
 						action={[
-							<IconButton key="close" aria-label="close" color="inherit" onClick={this.handleCloseFeedbackMsg}>
+							<IconButton key="close" aria-label="close" color="inherit" onClick={this.handleCloseFeedbackMessage}>
 								<CloseIcon className={classes.icon} />
 							</IconButton>,
 						]}
@@ -167,18 +191,24 @@ class UserProfile extends React.Component {
 		return null;
 	}
 
-	handleChange(event) {
-		const inputElement = event.target;
-		const inputName = inputElement.id;
-		const inputValue = inputElement.value;
+	renderSaveButton() {
+		const classes = this.classes;
 
-		this.setState({ [inputName]: inputValue });
+		return this.state.isUpdatingUserProfile ? (
+			<div>
+				<Button color="info" disabled={true}>Salvar</Button>
+				<CircularProgress size={24} className={classes.buttonProgress} />
+			</div>
+		) : (
+			<Button color="info" type="submit" >Salvar</Button>
+		);
 	}
 
 	render() {
 		const classes = this.classes;
 
-		const feedbackMsgComponent = this.getFeedbackMessage();
+		const feedbackMessageToast = this.renderFeedbackMessage();
+		const saveButton = this.renderSaveButton();
 
 		return (
 			<div>
@@ -202,7 +232,7 @@ class UserProfile extends React.Component {
 												}}
 												inputProps={{
 													value: this.state.username,
-													onChange: this.handleChange
+													onChange: this.handleInputChange
 												}}
 											/>
 										</GridItem>
@@ -216,7 +246,7 @@ class UserProfile extends React.Component {
 												}}
 												inputProps={{
 													value: this.state.email,
-													onChange: this.handleChange
+													onChange: this.handleInputChange
 												}}
 											/>
 										</GridItem>
@@ -231,7 +261,7 @@ class UserProfile extends React.Component {
 												}}
 												inputProps={{
 													value: this.state.firstName,
-													onChange: this.handleChange
+													onChange: this.handleInputChange
 												}}
 											/>
 										</GridItem>
@@ -244,7 +274,7 @@ class UserProfile extends React.Component {
 												}}
 												inputProps={{
 													value: this.state.lastName,
-													onChange: this.handleChange
+													onChange: this.handleInputChange
 												}}
 											/>
 										</GridItem>
@@ -268,7 +298,7 @@ class UserProfile extends React.Component {
 												}}
 												inputProps={{
 													value: this.state.companyName,
-													onChange: this.handleChange
+													onChange: this.handleInputChange
 												}}
 											/>
 										</GridItem>
@@ -283,7 +313,7 @@ class UserProfile extends React.Component {
 												}}
 												inputProps={{
 													value: this.state.companyAddress,
-													onChange: this.handleChange
+													onChange: this.handleInputChange
 												}}
 											/>
 										</GridItem>
@@ -296,7 +326,7 @@ class UserProfile extends React.Component {
 												}}
 												inputProps={{
 													value: this.state.companyPostalCode,
-													onChange: this.handleChange
+													onChange: this.handleInputChange
 												}}
 											/>
 										</GridItem>
@@ -311,7 +341,7 @@ class UserProfile extends React.Component {
 												}}
 												inputProps={{
 													value: this.state.city,
-													onChange: this.handleChange
+													onChange: this.handleInputChange
 												}}
 											/>
 										</GridItem>
@@ -324,7 +354,7 @@ class UserProfile extends React.Component {
 												}}
 												inputProps={{
 													value: this.state.country,
-													onChange: this.handleChange
+													onChange: this.handleInputChange
 												}}
 											/>
 										</GridItem>
@@ -333,18 +363,14 @@ class UserProfile extends React.Component {
 								</CardBody>
 
 								<CardFooter>
-									<Button
-										color="info"
-										type="submit"
-									>Salvar</Button>
+									{saveButton}
 								</CardFooter>
 							</Card>
 						</form>
 					</GridItem>
 				</GridContainer>
 
-				{feedbackMsgComponent}
-
+				{feedbackMessageToast}
 			</div>
 		);
 	}

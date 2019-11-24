@@ -15,7 +15,7 @@ class SignUp extends Component {
 		error: ""
 	};
 
-	async handleSignUp(e) {
+	handleSignUp = async (e) => {
 		e.preventDefault();
 
 		const { username, email, password } = this.state;

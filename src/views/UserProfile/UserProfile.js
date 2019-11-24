@@ -14,6 +14,7 @@ import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+// Componentes para mensagem de notificação "Snackbar"
 import clsx from 'clsx';
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
@@ -22,6 +23,10 @@ import { red, green, lightBlue } from '@material-ui/core/colors';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
 import CloseIcon from '@material-ui/icons/Close';
+
+// Componentes para formulário de Select
+import CustomSelect from "components/CustomSelect/CustomSelect.js";
+import MenuItem from '@material-ui/core/MenuItem';
 
 import api from "../../services/api";
 
@@ -84,8 +89,12 @@ class UserProfile extends React.Component {
 		this.handleUserProfileUpdate = this.handleUserProfileUpdate.bind(this);
 		this.handleInputChange = this.handleInputChange.bind(this);
 		this.handleCloseFeedbackMessage = this.handleCloseFeedbackMessage.bind(this);
+
 		this.renderFeedbackMessage = this.renderFeedbackMessage.bind(this);
 		this.renderSaveButton = this.renderSaveButton.bind(this);
+		this.renderCompanyForm = this.renderCompanyForm.bind(this);
+		this.renderUserProfileForm = this.renderUserProfileForm.bind(this);
+		this.renderUserRoleForm = this.renderUserRoleForm.bind(this);
 
 		this.classes = classes;
 
@@ -94,6 +103,7 @@ class UserProfile extends React.Component {
 			email: "",
 			firstName: "",
 			lastName: "",
+			userRole: "",
 
 			companyName: "",
 			companyAddress: "",
@@ -110,12 +120,13 @@ class UserProfile extends React.Component {
 		e.preventDefault();
 		this.setState({ isUpdatingUserProfile: true });
 
-		const { username, email, firstName, lastName, companyName, companyAddress, companyPostalCode, city, country } = this.state;
+		const { username, email, firstName, lastName, userRole, companyName, companyAddress, companyPostalCode, city, country } = this.state;
 		const data = {
 			username,
 			email,
 			firstName,
 			lastName,
+			userRole,
 			companyName,
 			companyAddress,
 			companyPostalCode,
@@ -204,11 +215,209 @@ class UserProfile extends React.Component {
 		);
 	}
 
-	render() {
+	renderCompanyForm() {
 		const classes = this.classes;
 
+		return (
+			<div>
+				<div className={classes.cardSpace}></div>
+
+				<CardHeader color="warning">
+					<h4 className={classes.cardTitleWhite}>Minha Empresa</h4>
+				</CardHeader>
+
+				<CardBody>
+					<GridContainer>
+						<GridItem xs={12} sm={12} md={4}>
+							<CustomInput
+								labelText="Nome"
+								id="companyName"
+								formControlProps={{
+									fullWidth: true
+								}}
+								inputProps={{
+									value: this.state.companyName,
+									onChange: this.handleInputChange
+								}}
+							/>
+						</GridItem>
+					</GridContainer>
+					<GridContainer>
+						<GridItem xs={12} sm={12} md={6}>
+							<CustomInput
+								labelText="Endereço"
+								id="companyAddress"
+								formControlProps={{
+									fullWidth: true
+								}}
+								inputProps={{
+									value: this.state.companyAddress,
+									onChange: this.handleInputChange
+								}}
+							/>
+						</GridItem>
+						<GridItem xs={12} sm={12} md={2}>
+							<CustomInput
+								labelText="CEP"
+								id="companyPostalCode"
+								formControlProps={{
+									fullWidth: true
+								}}
+								inputProps={{
+									value: this.state.companyPostalCode,
+									onChange: this.handleInputChange
+								}}
+							/>
+						</GridItem>
+					</GridContainer>
+					<GridContainer>
+						<GridItem xs={12} sm={12} md={4}>
+							<CustomInput
+								labelText="Cidade"
+								id="city"
+								formControlProps={{
+									fullWidth: true
+								}}
+								inputProps={{
+									value: this.state.city,
+									onChange: this.handleInputChange
+								}}
+							/>
+						</GridItem>
+						<GridItem xs={12} sm={12} md={4}>
+							<CustomInput
+								labelText="País"
+								id="country"
+								formControlProps={{
+									fullWidth: true
+								}}
+								inputProps={{
+									value: this.state.country,
+									onChange: this.handleInputChange
+								}}
+							/>
+						</GridItem>
+					</GridContainer>
+				</CardBody>
+			</div>
+		);
+	}
+
+	renderUserRoleForm() {
+		const handleSelectChange = event => {
+			const userRoleValue = event.target.value;
+			this.setState({ userRole: userRoleValue });
+		};
+
+		const userRoleApicultor = "Apicultor";
+		const userRoleTecnico = "Técnico";
+		const menuItems = [
+            <MenuItem key={userRoleApicultor} value={userRoleApicultor} >{userRoleApicultor}</MenuItem>,
+            <MenuItem key={userRoleTecnico} value={userRoleTecnico} >{userRoleTecnico}</MenuItem>
+        ];
+
+		return (
+			<GridItem xs={12} sm={12} md={4}>
+				<CustomSelect
+					labelText="Cargo"
+					id="userRole"
+					formControlProps={{
+						fullWidth: true,
+					}}
+					inputProps={{
+						value: this.state.userRole,
+						onChange: handleSelectChange
+					}}
+					selectProps={{
+						options: menuItems
+					}}
+				/>
+			</GridItem>
+		);
+	}
+
+	renderUserProfileForm() {
+		const classes = this.classes;
+		const userRoleForm = this.renderUserRoleForm();
+
+		return (
+			<div>
+				<CardHeader color="warning">
+					<h4 className={classes.cardTitleWhite}>Meu Perfil</h4>
+				</CardHeader>
+
+				<CardBody>
+					<GridContainer>
+						<GridItem xs={12} sm={12} md={3}>
+							<CustomInput
+								labelText="Usuário"
+								id="username"
+								formControlProps={{
+									fullWidth: true,
+									required: true,
+								}}
+								inputProps={{
+									value: this.state.username,
+									onChange: this.handleInputChange
+								}}
+							/>
+						</GridItem>
+						<GridItem xs={12} sm={12} md={4}>
+							<CustomInput
+								labelText="E-mail"
+								id="email"
+								formControlProps={{
+									fullWidth: true,
+									required: true,
+								}}
+								inputProps={{
+									value: this.state.email,
+									onChange: this.handleInputChange
+								}}
+							/>
+						</GridItem>
+					</GridContainer>
+					<GridContainer>
+						<GridItem xs={12} sm={12} md={3}>
+							<CustomInput
+								labelText="Nome"
+								id="firstName"
+								formControlProps={{
+									fullWidth: true
+								}}
+								inputProps={{
+									value: this.state.firstName,
+									onChange: this.handleInputChange
+								}}
+							/>
+						</GridItem>
+						<GridItem xs={12} sm={12} md={4}>
+							<CustomInput
+								labelText="Sobrenome"
+								id="lastName"
+								formControlProps={{
+									fullWidth: true
+								}}
+								inputProps={{
+									value: this.state.lastName,
+									onChange: this.handleInputChange
+								}}
+							/>
+						</GridItem>
+					</GridContainer>
+					<GridContainer>
+						{userRoleForm}
+					</GridContainer>
+				</CardBody>
+			</div>
+		);
+	}
+
+	render() {
 		const feedbackMessageToast = this.renderFeedbackMessage();
 		const saveButton = this.renderSaveButton();
+		const companyForm = this.renderCompanyForm();
+		const userProfileForm = this.renderUserProfileForm();
 
 		return (
 			<div>
@@ -216,152 +425,8 @@ class UserProfile extends React.Component {
 					<GridItem xs={12} sm={12} md={12}>
 						<form onSubmit={this.handleUserProfileUpdate}>
 							<Card>
-								<CardHeader color="warning">
-									<h4 className={classes.cardTitleWhite}>Meu Perfil</h4>
-								</CardHeader>
-
-								<CardBody>
-									<GridContainer>
-										<GridItem xs={12} sm={12} md={3}>
-											<CustomInput
-												labelText="Usuário"
-												id="username"
-												formControlProps={{
-													fullWidth: true,
-													required: true,
-												}}
-												inputProps={{
-													value: this.state.username,
-													onChange: this.handleInputChange
-												}}
-											/>
-										</GridItem>
-										<GridItem xs={12} sm={12} md={4}>
-											<CustomInput
-												labelText="E-mail"
-												id="email"
-												formControlProps={{
-													fullWidth: true,
-													required: true,
-												}}
-												inputProps={{
-													value: this.state.email,
-													onChange: this.handleInputChange
-												}}
-											/>
-										</GridItem>
-									</GridContainer>
-									<GridContainer>
-										<GridItem xs={12} sm={12} md={3}>
-											<CustomInput
-												labelText="Nome"
-												id="firstName"
-												formControlProps={{
-													fullWidth: true
-												}}
-												inputProps={{
-													value: this.state.firstName,
-													onChange: this.handleInputChange
-												}}
-											/>
-										</GridItem>
-										<GridItem xs={12} sm={12} md={4}>
-											<CustomInput
-												labelText="Sobrenome"
-												id="lastName"
-												formControlProps={{
-													fullWidth: true
-												}}
-												inputProps={{
-													value: this.state.lastName,
-													onChange: this.handleInputChange
-												}}
-											/>
-										</GridItem>
-									</GridContainer>
-								</CardBody>
-
-								<div className={classes.cardSpace}></div>
-
-								<CardHeader color="warning">
-									<h4 className={classes.cardTitleWhite}>Minha Empresa</h4>
-								</CardHeader>
-
-								<CardBody>
-									<GridContainer>
-										<GridItem xs={12} sm={12} md={4}>
-											<CustomInput
-												labelText="Nome"
-												id="companyName"
-												formControlProps={{
-													fullWidth: true
-												}}
-												inputProps={{
-													value: this.state.companyName,
-													onChange: this.handleInputChange
-												}}
-											/>
-										</GridItem>
-									</GridContainer>
-									<GridContainer>
-										<GridItem xs={12} sm={12} md={6}>
-											<CustomInput
-												labelText="Endereço"
-												id="companyAddress"
-												formControlProps={{
-													fullWidth: true
-												}}
-												inputProps={{
-													value: this.state.companyAddress,
-													onChange: this.handleInputChange
-												}}
-											/>
-										</GridItem>
-										<GridItem xs={12} sm={12} md={2}>
-											<CustomInput
-												labelText="CEP"
-												id="companyPostalCode"
-												formControlProps={{
-													fullWidth: true
-												}}
-												inputProps={{
-													value: this.state.companyPostalCode,
-													onChange: this.handleInputChange
-												}}
-											/>
-										</GridItem>
-									</GridContainer>
-									<GridContainer>
-										<GridItem xs={12} sm={12} md={4}>
-											<CustomInput
-												labelText="Cidade"
-												id="city"
-												formControlProps={{
-													fullWidth: true
-												}}
-												inputProps={{
-													value: this.state.city,
-													onChange: this.handleInputChange
-												}}
-											/>
-										</GridItem>
-										<GridItem xs={12} sm={12} md={4}>
-											<CustomInput
-												labelText="País"
-												id="country"
-												formControlProps={{
-													fullWidth: true
-												}}
-												inputProps={{
-													value: this.state.country,
-													onChange: this.handleInputChange
-												}}
-											/>
-										</GridItem>
-									</GridContainer>
-
-								</CardBody>
-
+								{userProfileForm}
+								{companyForm}
 								<CardFooter>
 									{saveButton}
 								</CardFooter>

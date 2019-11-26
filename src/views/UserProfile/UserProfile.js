@@ -113,14 +113,45 @@ class UserProfile extends React.Component {
 
 			feedbackMessage: "",
 			isUpdatingUserProfile: false,
+			hasNoUserProfile: false,
+			userProfileId: "",
 		};
+	}
+
+	async componentDidMount() {
+		try {
+			const { data } = await api.get("/users");
+
+			this.setState({
+				email: data.email,
+				username: data.username
+			});
+
+			try {
+				const {data:userProfile} = await api.get(`/userProfiles/${data.id}`);
+				
+				this.setState({
+					firstName: userProfile.first_name,
+					lastName: userProfile.last_name,
+					userRole: userProfile.user_role,
+					userProfileId: userProfile.id,
+				});
+			} catch (err) {
+				console.error('Não foi possível requisitar os dados do perfil do usuário', err);
+				this.setState({
+					hasNoUserProfile: true
+				})
+			}
+		} catch (err) {
+			console.error("GET userData Error:", err);
+		}
 	}
 	
 	async handleUserProfileUpdate(e) {
 		e.preventDefault();
 		this.setState({ isUpdatingUserProfile: true });
 
-		const { username, email, firstName, lastName, userRole, companyName, companyAddress, companyPostalCode, city, country } = this.state;
+		/*const { username, email, firstName, lastName, userRole, companyName, companyAddress, companyPostalCode, city, country } = this.state;
 		const data = {
 			username,
 			email,
@@ -133,16 +164,25 @@ class UserProfile extends React.Component {
 			city,
 			country
 		};
-		console.log('handleUserProfileUpdate data', data);
+		*/
 
+		const { firstName, lastName, userRole, hasNoUserProfile, userProfileId } = this.state;
 		try {
-			await api.post("/userProfiles", data);
+			const data = { firstName, lastName, userRole };
+
+			if (hasNoUserProfile) {
+				await api.post("/userProfiles", data);
+			} else {
+				await api.put(`/userProfiles/${userProfileId}`, data);
+			}
+
 			this.setState({
 				feedbackMessage: "success",
-				isUpdatingUserProfile: false
+				isUpdatingUserProfile: false,
+				hasNoUserProfile: false
 			});
 		} catch (err) {
-			console.log(err);
+			console.error("handleUserProfileUpdate Error:", err);
 			this.setState({
 				feedbackMessage: "error",
 				isUpdatingUserProfile: false
@@ -309,9 +349,13 @@ class UserProfile extends React.Component {
 			this.setState({ userRole: userRoleValue });
 		};
 
+		// TODO: Melhorar estas constantes. Sugestão: Criar um Map()
 		const userRoleApicultor = "Apicultor";
 		const userRoleTecnico = "Técnico";
+		const userRoleNenhum = "Nenhum";
+		// TODO: Melhorar aqui, possivelmente usando um iterador para criar tais componentes e dar push no array
 		const menuItems = [
+			<MenuItem key={userRoleNenhum} value={userRoleNenhum} >{userRoleNenhum}</MenuItem>,
             <MenuItem key={userRoleApicultor} value={userRoleApicultor} >{userRoleApicultor}</MenuItem>,
             <MenuItem key={userRoleTecnico} value={userRoleTecnico} >{userRoleTecnico}</MenuItem>
         ];
@@ -354,7 +398,7 @@ class UserProfile extends React.Component {
 								id="username"
 								formControlProps={{
 									fullWidth: true,
-									required: true,
+									disabled: true,
 								}}
 								inputProps={{
 									value: this.state.username,
@@ -368,7 +412,7 @@ class UserProfile extends React.Component {
 								id="email"
 								formControlProps={{
 									fullWidth: true,
-									required: true,
+									disabled: true,
 								}}
 								inputProps={{
 									value: this.state.email,
@@ -416,7 +460,9 @@ class UserProfile extends React.Component {
 	render() {
 		const feedbackMessageToast = this.renderFeedbackMessage();
 		const saveButton = this.renderSaveButton();
-		const companyForm = this.renderCompanyForm();
+		// Por enquanto não apresentará formulário de empresa:
+		//const companyForm = this.renderCompanyForm();
+		const companyForm = null;
 		const userProfileForm = this.renderUserProfileForm();
 
 		return (

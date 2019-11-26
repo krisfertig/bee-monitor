@@ -1,4 +1,4 @@
-const TOKEN_KEY = "@airbnb-Token";
+const TOKEN_KEY = "@beemonitor-Token";
 
 function isAuthenticated() {
 	const hasToken = localStorage.getItem(TOKEN_KEY) !== null;

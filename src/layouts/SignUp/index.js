@@ -4,6 +4,7 @@ import { Link, withRouter } from "react-router-dom";
 import Logo from "../../assets/bee-monitor-logo.png";
 
 import { Form, Container } from "./styles";
+import Tooltip from '@material-ui/core/Tooltip';
 
 import api from "../../services/api";
 
@@ -39,14 +40,17 @@ class SignUp extends Component {
 				<Form onSubmit={this.handleSignUp}>
 					<img src={Logo} alt="Bee Monitor logo" />
 					{this.state.error && <p>{this.state.error}</p>}
-					<input
-						type="text"
-						placeholder="Nome de usuário"
-						onChange={e => this.setState({ username: e.target.value })}
-					/>
+					<Tooltip title="Insira um nome de usuário sem espaço">
+						<input
+							type="text"
+							placeholder="Usuário"
+							pattern="[^\s]+" //regex for no whitespaces
+							onChange={e => this.setState({ username: e.target.value })}
+						/>
+					</Tooltip>
 					<input
 						type="email"
-						placeholder="Endereço de e-mail"
+						placeholder="E-mail"
 						onChange={e => this.setState({ email: e.target.value })}
 					/>
 					<input

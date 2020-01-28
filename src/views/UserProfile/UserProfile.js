@@ -120,7 +120,8 @@ class UserProfile extends React.Component {
 
 	async componentDidMount() {
 		try {
-			const { data } = await api.get("/users");
+			const { data } = await api.get("/bee-auth/api/v1/users");
+			
 
 			this.setState({
 				email: data.email,
@@ -128,7 +129,7 @@ class UserProfile extends React.Component {
 			});
 
 			try {
-				const {data:userProfile} = await api.get(`/userProfiles/${data.id}`);
+				const {data:userProfile} = await api.get(`/bee-auth/api/v1/userProfiles/${data.id}`);
 				
 				this.setState({
 					firstName: userProfile.first_name,
@@ -171,9 +172,9 @@ class UserProfile extends React.Component {
 			const data = { firstName, lastName, userRole };
 
 			if (hasNoUserProfile) {
-				await api.post("/userProfiles", data);
+				await api.post('/bee-auth/api/v1/userProfiles', data);
 			} else {
-				await api.put(`/userProfiles/${userProfileId}`, data);
+				await api.put(`/bee-auth/api/v1/userProfiles/${userProfileId}`, data);
 			}
 
 			this.setState({

@@ -23,7 +23,8 @@ class SignIn extends Component {
 			this.setState({ error: "Preencha e-mail e senha para continuar!" });
 		} else {
 			try {
-				const response = await api.post("/sessions", { email, password });
+				//const response = await api.post("/sessions", { email, password });
+				const response = await api.post("/bee-auth/api/v1/sessions", { email, password });
 
 				login(response.data.token);
 				this.props.history.push("/app");

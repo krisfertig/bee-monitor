@@ -25,7 +25,8 @@ class SignUp extends Component {
 			this.setState({ error: "Preencha todos os dados para se cadastrar" });
 		} else {
 			try {
-				await api.post("/users", { username, email, password });
+				//TODO: Criar uma constante com a rota BEE_AUTH
+				await api.post("/bee-auth/api/v1/users", { username, email, password });
 				this.props.history.push("/");
 			} catch (err) {
 				console.log(err);

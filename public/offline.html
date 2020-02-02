@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="br">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+	<meta name="theme-color" content="#000000" />
+	<meta name="description" content="A beehive monitor app">
+	<title>Bee Monitor App</title>
+
+	<link rel="manifest" href="/manifest.json">
+
+	<style>
+
+		* {
+			box-sizing: border-box;
+		}
+
+		html, body {
+			padding: 0;
+			margin: 0;
+			height: 100%;
+			width: 100%;
+			font-family: 'Helvetica', 'Verdana', sans-serif;
+			font-weight: 400;
+			font-display: optional;
+			color: #444;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+		}
+
+		html {
+			overflow: hidden;
+		}
+
+		body {
+			display: -webkit-box;
+			display: -webkit-flex;
+			display: -ms-flexbox;
+			display: flex;
+			-webkit-box-orient: vertical;
+			-webkit-box-direction: normal;
+			-webkit-flex-direction: column;
+				-ms-flex-direction: column;
+					flex-direction: column;
+			-webkit-flex-wrap: nowrap;
+				-ms-flex-wrap: nowrap;
+					flex-wrap: nowrap;
+			-webkit-box-pack: start;
+			-webkit-justify-content: flex-start;
+				-ms-flex-pack: start;
+					justify-content: flex-start;
+			-webkit-box-align: stretch;
+			-webkit-align-items: stretch;
+				-ms-flex-align: stretch;
+					align-items: stretch;
+			-webkit-align-content: stretch;
+				-ms-flex-line-pack: stretch;
+					align-content: stretch;
+			background: #ececec;
+		}
+
+		.main {
+			padding-top: 60px;
+			-webkit-box-flex: 1;
+			-webkit-flex: 1;
+				-ms-flex: 1;
+					flex: 1;
+			overflow-x: hidden;
+			overflow-y: auto;
+			-webkit-overflow-scrolling: touch;
+		}
+
+		.main-card {
+			padding: 16px;
+			position: relative;
+			box-sizing: border-box;
+			background: #fff;
+			border-radius: 2px;
+			margin: 16px;
+			box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+		}
+
+		.offline-app {
+			margin-left: auto;
+			margin-right: auto;
+			margin-bottom: 1.5em;
+			display: block;
+		}
+
+		.card-text {
+			text-align: center;
+		}
+
+	</style>
+</head>
+<body>
+
+	<main class="main">
+		<div class="main-card">
+			<!-- Adicionar como src o código base64 da imagem-->
+			<img alt="Bee Monitor Logo" class="offline-app" src="data:image/png;base64,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">
+			<div class="card-text">
+				Oops, você parece estar offline. Este app requer uma conexão com a internet.
+			</div>
+		</div>
+	</main>
+
+	<script>
+		if ('serviceWorker' in navigator) {
+			window.addEventListener('load', () => {
+				navigator.serviceWorker.register('/service-worker-custom.js')
+					.then((reg) => {
+						console.log('Service worker registered.', reg);
+					});
+			});
+		}
+	</script>
+
+</body>
+</html>

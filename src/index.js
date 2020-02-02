@@ -26,7 +26,6 @@ import * as installScript from './installScript';
 ReactDOM.render(<App />,
 	document.getElementById('root'),
 	() => {
-		console.log('component mounted');
 		installScript.init();
 	});
 

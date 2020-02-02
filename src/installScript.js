@@ -15,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License
  */
-'use strict';
 
 let deferredInstallPrompt = null;
 let installButton = null;
@@ -30,12 +29,10 @@ window.addEventListener('beforeinstallprompt', saveBeforeInstallPromptEvent);
  * @param {Event} evt
  */
 function saveBeforeInstallPromptEvent(evt) {
-	console.log('saveBeforeInstallPromptEvent', evt);
 	// Save event & show the install button.
 	deferredInstallPrompt = evt;
 	installButton.style.visibility = "visible";
 }
-
 
 /**
  * Event handler for butInstall - Does the PWA installation.
@@ -49,11 +46,11 @@ function installPWA(evt) {
 	// Log user response to prompt.
 	deferredInstallPrompt.userChoice.then((choice) => {
 		if (choice.outcome === 'accepted') {
-			console.log('User accepted the A2HS prompt', choice);
+			console.log('[InstallScript] Usuário aceitou a solicitação do prompt de instalação do App.', choice);
 			// Hide the install button, it can't be called twice.
 			installButton.style.visibility = "hidden";
 		} else {
-			console.log('User dismissed the A2HS prompt', choice);
+			console.log('[InstallScript] Usuário rejeitou a solicitação do prompt de instalação do App.', choice);
 		}
 		deferredInstallPrompt = null;
 	})
@@ -71,15 +68,13 @@ window.addEventListener('appinstalled', logAppInstalled);
  */
 function logAppInstalled(evt) {
 	// Log the event
-	console.log('Bee Monitor App was installed.', evt);
+	console.log('[InstallScript] Bee Monitor App foi instalado.', evt);
 
 }
 
 export function init() {
-	console.log('install.js init');
+	console.log('[InstallScript] Preparando aplicação para exibir opção de instalação do App se possível');
 
 	installButton = document.getElementById('butInstall');
-	console.log('install.js installButton', installButton);
-
 	installButton.addEventListener('click', installPWA);
 }

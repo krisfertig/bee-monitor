@@ -1,20 +1,23 @@
+import * as notificationManager from './notificationManager';
+
 export function register() {
 	if ('serviceWorker' in navigator) {
-		console.log('Service worker is supported.');
+		console.log('[ServiceWorker] Supported');
 
 		window.addEventListener('load', () => {
 			navigator.serviceWorker.register('/service-worker-custom.js')
-				.then((reg) => {
-					console.log('Service worker registered.', reg);
+				.then(registration => {
+					console.log('[ServiceWorker] Registered', registration);
+					notificationManager.init();
 				});
 		});
 	}
 }
 
 export function unregister() {
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.ready.then(registration => {
-      registration.unregister();
-    });
-  }
+	if ('serviceWorker' in navigator) {
+		navigator.serviceWorker.ready.then(registration => {
+			registration.unregister();
+		});
+	}
 }

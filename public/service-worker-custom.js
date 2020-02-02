@@ -1,4 +1,4 @@
-const CACHE_NAME = 'static-cache-v2.6';
+const CACHE_NAME = 'static-cache-v2.9';
 
 const FILES_TO_CACHE = [
 	'/offline.html',
@@ -53,4 +53,53 @@ self.addEventListener('fetch', (evt) => {
 		})
 	);
 
+});
+
+//Handle the notificationclose event
+self.addEventListener('notificationclose', event => {
+
+	const notification = event.notification;
+	const primaryKey = notification.data.primaryKey;
+
+	console.log('[ServiceWorker] Fechou a notificação: ' + primaryKey);
+});
+
+// Handle the notificationclick event
+self.addEventListener('notificationclick', event => {
+
+	// Code to open a custom page
+	const notification = event.notification;
+	const action = event.action;
+
+	if (action === 'close') {
+		notification.close();
+	} else {
+		//clients.openWindow('/');
+		notification.close();
+	}
+
+	// TODO 5.3 - close all notifications when one is clicked
+});
+
+//Push event listener
+self.addEventListener('push', function(event) {
+	const notifMessage = event.data.text();
+	console.log('[ServiceWorker] Recebeu Notificação Push:', notifMessage);
+
+	const title = 'Bee Monitor';
+	const options = {
+		body: notifMessage,
+		badge: 'images/badge.png',
+		vibrate: [100, 50, 100],
+		data: {
+			dateOfArrival: Date.now(),
+			primaryKey: 1
+		},
+		actions: [
+			{action: 'close', title: 'Fechar'}
+		]
+	};
+
+	const notificationPromise = self.registration.showNotification(title, options);
+	event.waitUntil(notificationPromise);
 });

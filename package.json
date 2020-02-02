@@ -22,7 +22,8 @@
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.1.0",
     "react-swipeable-views": "0.13.3",
-    "styled-components": "^4.4.1"
+    "styled-components": "^4.4.1",
+    "web-push": "^3.2.5"
   },
   "scripts": {
     "start": "HTTPS=true react-scripts start",

@@ -26,15 +26,17 @@ async function initializeSubscription() {
 	console.log('[NotificationManager] Inicializando inscrições...');
 
 	// Get the subscription object
-	swRegistration.pushManager.getSubscription().then(subscription => {
-		isSubscribed = (subscription !== null);
-		if (isSubscribed) {
-			console.log('[NotificationManager] Usuário está inscrito.');
-		} else {
-			console.log('[NotificationManager] Usuário não está inscrito.');
-			subscribeUser();
-		}
-	});
+	if(swRegistration) {
+		swRegistration.pushManager.getSubscription().then(subscription => {
+			isSubscribed = (subscription !== null);
+			if (isSubscribed) {
+				console.log('[NotificationManager] Usuário está inscrito.');
+			} else {
+				console.log('[NotificationManager] Usuário não está inscrito.');
+				subscribeUser();
+			}
+		});
+	}
 }
 
 function subscribeUser() {
@@ -65,18 +67,20 @@ function unsubscribeUser() {
 	let subscription = null;
 
 	// Unsubscribe from the push service
-	swRegistration.pushManager.getSubscription().then(sub => {
-		if (sub) {
-			subscription = sub;
-			return sub.unsubscribe();
-		}
-	}).catch(err => {
-		console.error('[NotificationManager - unsubscribeUser] Erro ao desinscrever usuário. Motivo:', err);
-	}).then(() => {
-		unsubscribeOnServer(subscription);
-		console.log('[NotificationManager - unsubscribeUser] Usuário desinscrito');
-		isSubscribed = false;
-	});
+	if(swRegistration) {
+		swRegistration.pushManager.getSubscription().then(sub => {
+			if (sub) {
+				subscription = sub;
+				return sub.unsubscribe();
+			}
+		}).catch(err => {
+			console.error('[NotificationManager - unsubscribeUser] Erro ao desinscrever usuário. Motivo:', err);
+		}).then(() => {
+			unsubscribeOnServer(subscription);
+			console.log('[NotificationManager - unsubscribeUser] Usuário desinscrito');
+			isSubscribed = false;
+		});
+	}
 }
 
 function unsubscribeOnServer(subscription) {

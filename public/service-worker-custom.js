@@ -76,8 +76,8 @@ self.addEventListener('notificationclick', event => {
 		notification.close();
 	} else {
 		//TODO: Tratar outras actions das notificações aqui
-		// Por padrão, deve fechar a notificação ao clicar na mesma
-		//clients.openWindow('/');
+		// Por padrão, deve abrir o dashboard da aplicação e fechar notificação ao clicar em cima dela
+		clients.openWindow('/app/dashboard');
 		notification.close();
 	}
 

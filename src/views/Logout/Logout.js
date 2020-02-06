@@ -7,8 +7,7 @@ import * as notificationManager from '../../notificationManager';
 
 export default function Logout() {
 
-	logout();
-	notificationManager.terminate();
+	notificationManager.terminate().then(logout);
 
 	return (
 		<Switch>

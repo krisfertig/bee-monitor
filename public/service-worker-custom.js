@@ -1,5 +1,6 @@
-const CACHE_NAME = 'static-cache-v2.9';
+const CACHE_NAME = 'static-cache-v3.0';
 
+//TODO: Adicionar mais arquivos para cachear
 const FILES_TO_CACHE = [
 	'/offline.html',
 ];
@@ -37,7 +38,7 @@ self.addEventListener('activate', (evt) => {
 });
 
 self.addEventListener('fetch', (evt) => {
-	console.log('[ServiceWorker] Fetch', evt.request.url);
+	console.log('[ServiceWorker] Fetch');
 
 	// Fetch event handler here.
 	if (evt.request.mode !== 'navigate') {
@@ -74,6 +75,8 @@ self.addEventListener('notificationclick', event => {
 	if (action === 'close') {
 		notification.close();
 	} else {
+		//TODO: Tratar outras actions das notificações aqui
+		// Por padrão, deve fechar a notificação ao clicar na mesma
 		//clients.openWindow('/');
 		notification.close();
 	}
@@ -81,14 +84,16 @@ self.addEventListener('notificationclick', event => {
 	// TODO 5.3 - close all notifications when one is clicked
 });
 
+const BEE_MONITOR_DEFAULT_NOTIF_TITLE = 'Bee Monitor';
 //Push event listener
 self.addEventListener('push', function(event) {
-	const notifMessage = event.data.text();
-	console.log('[ServiceWorker] Recebeu Notificação Push:', notifMessage);
+	const notif = JSON.parse(event.data.text());
+	console.log('[ServiceWorker] Recebeu Notificação Push:', notif);
 
-	const title = 'Bee Monitor';
+	//TODO: Poderia utilizar um utilitário ou método do notificationManager, como 'displayNotification()'
+	const title = notif.title || BEE_MONITOR_DEFAULT_NOTIF_TITLE;
 	const options = {
-		body: notifMessage,
+		body: notif.body || '',
 		badge: 'images/badge.png',
 		vibrate: [100, 50, 100],
 		data: {

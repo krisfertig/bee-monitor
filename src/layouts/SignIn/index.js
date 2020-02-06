@@ -5,6 +5,9 @@ import Logo from "../../assets/bee-monitor-logo.png";
 import api from "../../services/api";
 import { login } from "../../services/auth";
 
+//TODO: Talvez mover o arquivo notificationManager para dentro de /services, e utilizar como se fosse um serviço
+import * as notificationManager from '../../notificationManager';
+
 import { Form, Container } from "./styles";
 
 class SignIn extends Component {
@@ -23,10 +26,11 @@ class SignIn extends Component {
 			this.setState({ error: "Preencha e-mail e senha para continuar!" });
 		} else {
 			try {
-				//const response = await api.post("/sessions", { email, password });
 				const response = await api.post("/bee-auth/api/v1/sessions", { email, password });
 
 				login(response.data.token);
+				notificationManager.init();
+
 				this.props.history.push("/app");
 			} catch (err) {
 				this.setState({

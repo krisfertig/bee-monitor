@@ -8,7 +8,6 @@ export function register() {
 			navigator.serviceWorker.register('/service-worker-custom.js')
 				.then(registration => {
 					console.log('[ServiceWorker] Registered', registration);
-					notificationManager.init();
 				});
 		});
 	}

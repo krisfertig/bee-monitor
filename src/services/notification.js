@@ -14,10 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const SERVER_URL = 'https://10.42.0.1';
+import { SERVER_URL, SERVER_VAPID_PUBLIC_KEY, BEE_NOTIFICATION_SERVICE } from "../constants";
 
-// VAPID PUBLIC KEY:
-const applicationServerPublicKey = 'BE09RQJgbuwgqVe5YRtIPogJC47yKW6-mk3bIODq_0ODAgN93gwllGu3v-OmIoAyPuxGqut76264W1A4C_k2NQg';
 
 let isSubscribed = false;
 let swRegistration = null;
@@ -41,7 +39,7 @@ async function initializeSubscription() {
 
 function subscribeUser() {
 	console.log('[notificationService - subscribeUser] Inscrevendo usuário no PushManager');
-	const applicationServerKey = urlB64ToUint8Array(applicationServerPublicKey);
+	const applicationServerKey = urlB64ToUint8Array(SERVER_VAPID_PUBLIC_KEY);
 
 	// subscribe to the push service
 	swRegistration.pushManager.subscribe({
@@ -87,7 +85,7 @@ function unsubscribeOnServer(subscription) {
 	console.log('[notificationService] Atualizando desinscrição do Push Manager no servidor.');
 
 	if (subscription) {
-		return fetch(`${SERVER_URL}/bee-notification/api/v1/notifications/unsubscribe`, {
+		return fetch(`${SERVER_URL}${BEE_NOTIFICATION_SERVICE}/v1/notifications/unsubscribe`, {
 			method: 'POST',
 			body: JSON.stringify({ subscription }),
 			headers: {
@@ -102,7 +100,7 @@ function subscribeOnServer(subscription) {
 
 	// Here's where you would send the subscription to the application server
 	if (subscription) {
-		return fetch(`${SERVER_URL}/bee-notification/api/v1/notifications/subscribe`, {
+		return fetch(`${SERVER_URL}${BEE_NOTIFICATION_SERVICE}/v1/notifications/subscribe`, {
 			method: 'POST',
 			body: JSON.stringify({ subscription }),
 			headers: {
@@ -189,7 +187,8 @@ export async function terminate() {
 function urlB64ToUint8Array(base64String) {
 	const padding = '='.repeat((4 - base64String.length % 4) % 4);
 	const base64 = (base64String + padding)
-		.replace(/\-/g, '+')
+		//.replace(/\-/g, '+')
+		.replace(/-/g, '+')
 		.replace(/_/g, '/');
 
 	const rawData = window.atob(base64);

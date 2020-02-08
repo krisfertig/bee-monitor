@@ -6,15 +6,19 @@ import Hidden from "@material-ui/core/Hidden";
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
 
+import { SERVER_URL, BEE_GRAFANA_SERVICE } from "../../constants";
+
 export default function Dashboard() {
 
 	const screenSize = window.innerHeight;
 	const dashboardHeight = screenSize - 150;
 
+	const dashboardUrl = `${SERVER_URL}${BEE_GRAFANA_SERVICE}/d/m2T90j1Zz/bee-monitor?orgId&refresh=1h`;
+
 	const dashboardView = (
 		<Hidden>
 			<iframe
-				src="https://10.42.0.1/bee-grafana/d/m2T90j1Zz/bee-monitor?orgId&refresh=1h"
+				src={dashboardUrl}
 				width="100%"
 				height={dashboardHeight}
 				frameBorder="0"

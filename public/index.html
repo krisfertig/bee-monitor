@@ -49,24 +49,25 @@
 		/>
 	-->
 
+	<!-- Não está sendo usado no momento:
     <link
       rel="stylesheet"
       href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css"
     />
 
-    <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+	<script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+	-->
+
+	<!--
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons"
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons&display=swap"
     />
     <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons&display=swap"
       rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
+	/>
+	-->
 
     <!--
           Notice the use of %PUBLIC_URL% in the tags above.
@@ -79,6 +80,19 @@
 		-->
 	
 	<style>
+		.skip-link {
+			position: absolute;
+			top: -40px;
+			left: 0;
+			background: #000000;
+			color: white;
+			padding: 8px;
+			z-index: 100;
+		}
+
+		.skip-link:focus {
+			top: 0;
+		}
 
 		#butInstall {
 			background: #fcb963;
@@ -102,24 +116,26 @@
 			visibility: hidden;
 			margin: 0 calc(15%);
 		}
-
 	</style>
 
   </head>
   <body>
-	<noscript> Você precisa habilitar o JavaScript para executar este app. </noscript>
-	<!-- TODO: Ajustar botão para instalação do app -->
-	<button id="butInstall">INSTALAR APP</button>
-    <div id="root"></div>
-    <!--
-          This HTML file is a template.
-          If you open it directly in the browser, you will see an empty page.
+	<a class="skip-link" href="#maincontent">Skip to main</a>
+	<main id="maincontent">
+		<noscript> Você precisa habilitar o JavaScript para executar este app. </noscript>
+		<!-- TODO: Ajustar botão para instalação do app -->
+		<button id="butInstall">INSTALAR APP</button>
+		<div id="root"></div>
+		<!--
+			This HTML file is a template.
+			If you open it directly in the browser, you will see an empty page.
 
-          You can add webfonts, meta tags, or analytics to this file.
-          The build step will place the bundled scripts into the <body> tag.
+			You can add webfonts, meta tags, or analytics to this file.
+			The build step will place the bundled scripts into the <body> tag.
 
-          To begin the development, run `npm start` or `yarn start`.
-          To create a production bundle, use `npm run build` or `yarn build`.
-        -->
+			To begin the development, run `npm start` or `yarn start`.
+			To create a production bundle, use `npm run build` or `yarn build`.
+			-->
+	</main>
   </body>
 </html>

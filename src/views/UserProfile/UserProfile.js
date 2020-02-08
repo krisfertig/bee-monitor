@@ -30,6 +30,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 import api from "../../services/api";
 
+import { BEE_AUTH_SERVICE } from "../../constants";
+const userProfilesAPIUrl = `${BEE_AUTH_SERVICE}/v1/userProfiles`;
+
 const styles = {
 	cardCategoryWhite: {
 		color: "rgba(255,255,255,.62)",
@@ -96,6 +99,8 @@ class UserProfile extends React.Component {
 		this.renderUserProfileForm = this.renderUserProfileForm.bind(this);
 		this.renderUserRoleForm = this.renderUserRoleForm.bind(this);
 
+		this.getUserProfileData = this.getUserProfileData.bind(this);
+
 		this.classes = classes;
 
 		this.state = {
@@ -120,31 +125,41 @@ class UserProfile extends React.Component {
 
 	async componentDidMount() {
 		try {
-			const { data } = await api.get("/bee-auth/api/v1/users");
-			
-
+			const { data: { email, username, id } } = await api.get(`${BEE_AUTH_SERVICE}/v1/users`);
 			this.setState({
-				email: data.email,
-				username: data.username
+				email,
+				username,
 			});
 
-			try {
-				const {data:userProfile} = await api.get(`/bee-auth/api/v1/userProfiles/${data.id}`);
-				
-				this.setState({
-					firstName: userProfile.first_name,
-					lastName: userProfile.last_name,
-					userRole: userProfile.user_role,
-					userProfileId: userProfile.id,
-				});
-			} catch (err) {
-				console.error('Não foi possível requisitar os dados do perfil do usuário', err);
-				this.setState({
-					hasNoUserProfile: true
-				})
-			}
+			await this.getUserProfileData(id);
+
 		} catch (err) {
+			//TODO: Ajustar mensagem de erro deste log
 			console.error("GET userData Error:", err);
+		}
+	}
+
+	async getUserProfileData(userId) {
+		try {
+			const userProfileUrl = `${userProfilesAPIUrl}/${userId}`;
+			const { data: userProfile } = await api.get(userProfileUrl);
+			const {
+				first_name: firstName,
+				last_name: lastName,
+				user_role: userRole,
+				id: userProfileId } = userProfile;
+
+			this.setState({
+				firstName,
+				lastName,
+				userRole,
+				userProfileId,
+			});
+		} catch (err) {
+			console.error('Não foi possível requisitar os dados do perfil do usuário', err);
+			this.setState({
+				hasNoUserProfile: true
+			})
 		}
 	}
 	
@@ -172,9 +187,9 @@ class UserProfile extends React.Component {
 			const data = { firstName, lastName, userRole };
 
 			if (hasNoUserProfile) {
-				await api.post('/bee-auth/api/v1/userProfiles', data);
+				await api.post(userProfilesAPIUrl, data);
 			} else {
-				await api.put(`/bee-auth/api/v1/userProfiles/${userProfileId}`, data);
+				await api.put(`${userProfilesAPIUrl}/${userProfileId}`, data);
 			}
 
 			this.setState({
@@ -183,6 +198,7 @@ class UserProfile extends React.Component {
 				hasNoUserProfile: false
 			});
 		} catch (err) {
+			//TODO: Ajustar mensagem de erro deste log
 			console.error("handleUserProfileUpdate Error:", err);
 			this.setState({
 				feedbackMessage: "error",
@@ -461,6 +477,7 @@ class UserProfile extends React.Component {
 	render() {
 		const feedbackMessageToast = this.renderFeedbackMessage();
 		const saveButton = this.renderSaveButton();
+
 		// Por enquanto não apresentará formulário de empresa:
 		//const companyForm = this.renderCompanyForm();
 		const companyForm = null;

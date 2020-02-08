@@ -9,7 +9,7 @@ import Admin from "layouts/Admin.js";
 import SignUp from "./layouts/SignUp";
 import SignIn from "./layouts/SignIn";
 
-import { isAuthenticated } from "./services/auth";
+import * as authService from './services/auth';
 
 import "assets/css/material-dashboard-react.css?v=1.8.0";
 import "./styles/global";
@@ -17,16 +17,16 @@ import "./styles/global";
 const hist = createBrowserHistory();
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
-  <Route
-    {...rest}
-    render={props =>
-      isAuthenticated() ? (
-        <Component {...props} />
-      ) : (
-        <Redirect to={{ pathname: "/", state: { from: props.location } }} />
-      )
-    }
-  />
+	<Route
+		{...rest}
+		render={props =>
+			authService.isAuthenticated() ? (
+				<Component {...props} />
+			) : (
+				<Redirect to={{ pathname: "/", state: { from: props.location } }} />
+			)
+		}
+	/>
 );
 
 const App = () => {

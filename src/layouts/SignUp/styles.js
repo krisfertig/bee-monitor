@@ -32,7 +32,7 @@ export const Form = styled.form`
 	input {
 		flex: 1;
 		margin: 0 20px 15px 20px;
-		color: #777;
+		color: #000;
 		font-size: 15px;
 		width: calc(100% - 20px);
 		border: 1px solid #ddd;
@@ -44,15 +44,20 @@ export const Form = styled.form`
 		}
 	}
 
+	label {
+		color: transparent;
+	}
+
 	button {
 		color: #fff;
 		font-size: 16px;
-		background: #fcb963;
+		background: #387239;
 		height: 56px;
 		border: 0;
 		border-radius: 5px;
 		width: 100%;
 		cursor: pointer;
+		font-weight: bold;
 	}
 
 	hr {
@@ -65,8 +70,12 @@ export const Form = styled.form`
 	a {
 		font-size: 16;
 		font-weight: bold;
-		color: #999;
+		color: #000;
 		text-decoration: none;
 		font-family: 'Helvetica Neue', 'Helvetica', Arial, sans-serif;
+
+		:hover {
+			color: orange;
+		}
 	}
 `;

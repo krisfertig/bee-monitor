@@ -3,13 +3,14 @@ import { Link, withRouter } from "react-router-dom";
 
 import Logo from "../../assets/bee-monitor-logo.png";
 import api from "../../services/api";
-import { login } from "../../services/auth";
 
-//TODO: Talvez mover o arquivo notificationService para dentro de /services, e utilizar como se fosse um serviço
+import * as authService from '../../services/auth';
 import * as notificationService from '../../services/notification';
 import * as geolocationService from '../../services/geolocation';
 
 import { Form, Container } from "./styles";
+
+import { BEE_AUTH_SERVICE } from "../../constants";
 
 class SignIn extends Component {
 	state = {
@@ -27,9 +28,10 @@ class SignIn extends Component {
 			this.setState({ error: "Preencha e-mail e senha para continuar!" });
 		} else {
 			try {
-				const response = await api.post("/bee-auth/api/v1/sessions", { email, password });
+				const url = `${BEE_AUTH_SERVICE}/v1/sessions`;
+				const response = await api.post(url, { email, password });
 
-				login(response.data.token);
+				authService.login(response.data.token);
 				notificationService.init();
 				geolocationService.getCurrentPosition();
 
@@ -49,16 +51,23 @@ class SignIn extends Component {
 				<Form onSubmit={this.handleSignIn}>
 					<img src={Logo} alt="Bee Monitor logo" />
 					{this.state.error && <p>{this.state.error}</p>}
+
+					<label htmlFor="signin-email">E-mail</label>
 					<input
+						id="signin-email"
 						type="email"
 						placeholder="Endereço de e-mail"
 						onChange={e => this.setState({ email: e.target.value })}
 					/>
+
+					<label htmlFor="signin-password">Senha</label>
 					<input
+						id="signin-password"
 						type="password"
 						placeholder="Senha"
 						onChange={e => this.setState({ password: e.target.value })}
 					/>
+
 					<button type="submit">Entrar</button>
 					<hr />
 					<Link to="/signup">Criar conta grátis</Link>

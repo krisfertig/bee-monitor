@@ -1,12 +1,13 @@
 import axios from "axios";
-import { getToken } from "./auth";
+import * as authService from './auth';
+import { SERVER_URL } from "../constants";
 
 const api = axios.create({
-	baseURL: "https://10.42.0.1",
+	baseURL: SERVER_URL,
 });
 
 api.interceptors.request.use(async config => {
-	const token = getToken();
+	const token = authService.getToken();
 	if (token) {
 		config.headers.Authorization = `Bearer ${token}`;
 	}

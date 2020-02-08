@@ -14,11 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const SERVER_URL = 'https://10.42.0.1';
+import { SERVER_URL, BEE_SENSORS_SERVICE } from "../constants";
 
 function setCurrentPosition( position ) {
 	console.log('[geolocationService] Atualizando dados de localização no servidor.');
-	console.log('GEO position', position.coords);
 
 	const { latitude, longitude } = position.coords;
 	const geolocation = {
@@ -28,9 +27,8 @@ function setCurrentPosition( position ) {
 		},
 		deviceId: 'colmeia0001',
 	};
-	console.log('geolocation api geolocation', geolocation);
 
-	return fetch(`${SERVER_URL}/bee-sensors/api/v1/sensors/geolocation`, {
+	return fetch(`${SERVER_URL}${BEE_SENSORS_SERVICE}/v1/sensors/geolocation`, {
 		method: 'POST',
 		body: JSON.stringify({ geolocation: geolocation }),
 		headers: {
@@ -39,34 +37,39 @@ function setCurrentPosition( position ) {
 	});
 }
 
-function positionError( error ) {
+function positionError(error) {
 
-    switch ( error.code ) {
+    switch (error.code) {
         case error.PERMISSION_DENIED:
-            console.error( "User denied the request for Geolocation." );
+            console.error("O usuário negou a solicitação de geolocalização.");
             break;
         case error.POSITION_UNAVAILABLE:
-            console.error( "Location information is unavailable." );
+            console.error("As informações de localização não estão disponíveis.");
             break;
         case error.TIMEOUT:
-            console.error( "The request to get user location timed out." );
+            console.error("A solicitação para obter a localização do usuário expirou.");
             break;
         case error.UNKNOWN_ERROR:
-            console.error( "An unknown error occurred." );
-            break;
+            console.error("Ocorreu um erro desconhecido.");
+			break;
+		default:
+			console.error("Ocorreu um erro ao solicitar a localização.");
+			break;
     }
 }
 
 export async function getCurrentPosition() {
 	console.log('[geolocationService] Coletando dados de localização do usuário...');
 
+	const geolocationOptions = {
+		enableHighAccuracy: true,
+		timeout: 15000,
+		maximumAge: 0,
+	};
+
 	if ( navigator.geolocation ) {
-		/* geolocation is available */
-		navigator.geolocation.getCurrentPosition( setCurrentPosition, positionError, {
-			enableHighAccuracy: true,
-			timeout: 15000,
-			maximumAge: 0,
-		});
+		console.log('[geolocationService] Serviço de Geolocalização está disponível!');
+		navigator.geolocation.getCurrentPosition(setCurrentPosition, positionError, geolocationOptions);
 	} else {
 		console.log('[geolocationService] Serviço de Geolocalização não está habilitado ou é suportado no navegador');
 	}

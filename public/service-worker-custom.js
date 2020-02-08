@@ -5,6 +5,8 @@ const FILES_TO_CACHE = [
 	'/offline.html',
 ];
 
+const BEE_MONITOR_DEFAULT_NOTIF_TITLE = 'Bee Monitor';
+
 self.addEventListener('install', (evt) => {
 	console.log('[ServiceWorker] Install');
 
@@ -56,6 +58,8 @@ self.addEventListener('fetch', (evt) => {
 
 });
 
+// Notificações:
+
 //Handle the notificationclose event
 self.addEventListener('notificationclose', event => {
 
@@ -81,10 +85,9 @@ self.addEventListener('notificationclick', event => {
 		notification.close();
 	}
 
-	// TODO 5.3 - close all notifications when one is clicked
+	// TODO: close all notifications when one is clicked ?
 });
 
-const BEE_MONITOR_DEFAULT_NOTIF_TITLE = 'Bee Monitor';
 //Push event listener
 self.addEventListener('push', function(event) {
 	const notif = JSON.parse(event.data.text());

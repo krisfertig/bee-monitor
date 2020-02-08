@@ -33,7 +33,7 @@ class SignIn extends Component {
 
 				authService.login(response.data.token);
 				notificationService.init();
-				geolocationService.getCurrentPosition();
+//				geolocationService.getCurrentPosition();
 
 				this.props.history.push("/app");
 			} catch (err) {

@@ -1,10 +1,11 @@
 {
-  "name": "material-dashboard-react",
+  "name": "bee-monitor",
   "homepage": "https://github.com/creativetimofficial/material-dashboard-react",
   "authors": [
-    "creative-tim"
+	"creative-tim",
+	"Kristhine Schaeffer Fertig"
   ],
-  "description": "A Badass Material-UI Kit based on Material Design",
+  "description": "Interface do sistema de monitoramento Bee Monitor",
   "main": "public/index.html",
   "keywords": [
     "material",

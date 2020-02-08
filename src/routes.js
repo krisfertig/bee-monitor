@@ -19,6 +19,7 @@
 import Dashboard from "@material-ui/icons/Dashboard";
 import Person from "@material-ui/icons/Person";
 import ExitToApp from "@material-ui/icons/ExitToApp";
+import AllInbox from "@material-ui/icons/AllInbox";
 
 /*
 import EmojiNature from '@material-ui/icons/EmojiNature';
@@ -29,18 +30,20 @@ import Notifications from "@material-ui/icons/Notifications";
 import Unarchive from "@material-ui/icons/Unarchive";
 import Language from "@material-ui/icons/Language";
 */
+import Notifications from "@material-ui/icons/Notifications";
 // core components/views for Admin layout
 import DashboardPage from "views/Dashboard/Dashboard.js";
 import UserProfile from "views/UserProfile/UserProfile.js";
 import Logout from "views/Logout/Logout.js";
 
+import Beehives from "views/Beehives/Beehives.js";
 /*
 import TableList from "views/TableList/TableList.js";
 import Typography from "views/Typography/Typography.js";
 import Icons from "views/Icons/Icons.js";
 import Maps from "views/Maps/Maps.js";
-import NotificationsPage from "views/Notifications/Notifications.js";
 */
+import NotificationsPage from "views/Notifications/Notifications.js";
 
 const dashboardRoutes = [
 	{
@@ -58,6 +61,13 @@ const dashboardRoutes = [
 		layout: "/app"
 	},
 	{
+		path: "/beehives",
+		name: "Colmeias",
+		icon: AllInbox,
+		component: Beehives,
+		layout: "/app"
+	},
+	{
 		path: "/logout",
 		name: "Sair",
 		icon: ExitToApp,
@@ -72,14 +82,12 @@ const dashboardRoutes = [
 	  component: Icons,
 	  layout: "/app"
 	},
-	/*
 	{
 	  path: "/table",
 	  name: "Table List",
-	  rtlName: "قائمة الجدول",
 	  icon: "content_paste",
 	  component: TableList,
-	  layout: "/admin"
+	  layout: "/app"
 	},
 	{
 	  path: "/typography",
@@ -107,10 +115,9 @@ const dashboardRoutes = [
 	{
 	  path: "/notifications",
 	  name: "Notifications",
-	  rtlName: "إخطارات",
 	  icon: Notifications,
 	  component: NotificationsPage,
-	  layout: "/admin"
+	  layout: "/app"
 	}*/
 ];
 

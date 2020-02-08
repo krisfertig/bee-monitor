@@ -16,7 +16,9 @@ limitations under the License.
 
 import { SERVER_URL, BEE_SENSORS_SERVICE } from "../constants";
 
-function setCurrentPosition( position ) {
+let deviceId = null;
+
+async function setCurrentPosition( position ) {
 	console.log('[geolocationService] Atualizando dados de localização no servidor.');
 
 	const { latitude, longitude } = position.coords;
@@ -25,7 +27,7 @@ function setCurrentPosition( position ) {
 			latitude,
 			longitude,
 		},
-		deviceId: 'colmeia0001',
+		deviceId: deviceId || 'colmeia0001',
 	};
 
 	return fetch(`${SERVER_URL}${BEE_SENSORS_SERVICE}/v1/sensors/geolocation`, {
@@ -33,6 +35,12 @@ function setCurrentPosition( position ) {
 		body: JSON.stringify({ geolocation: geolocation }),
 		headers: {
 			'Content-Type': 'application/json'
+		}
+	}).then(response => {
+		if (response.ok) {
+			return Promise.resolve();
+		} else {
+			return Promise.reject(response.status);
 		}
 	});
 }
@@ -58,7 +66,17 @@ function positionError(error) {
     }
 }
 
-export async function getCurrentPosition() {
+function getLocalCurrentLocation(options) {
+	return new Promise((resolve, reject) => {
+		navigator.geolocation.getCurrentPosition(resolve, ({code, message}) =>
+			reject(Object.assign(new Error(message), {name: "PositionError", code})),
+			options);
+	});
+};
+
+export async function getCurrentPosition(beehiveId) {
+	deviceId = beehiveId;
+
 	console.log('[geolocationService] Coletando dados de localização do usuário...');
 
 	const geolocationOptions = {
@@ -69,7 +87,19 @@ export async function getCurrentPosition() {
 
 	if ( navigator.geolocation ) {
 		console.log('[geolocationService] Serviço de Geolocalização está disponível!');
-		navigator.geolocation.getCurrentPosition(setCurrentPosition, positionError, geolocationOptions);
+		//return navigator.geolocation.getCurrentPosition( setCurrentPosition, positionError, geolocationOptions);
+		/*try {
+			const position = await getLocalCurrentLocation(geolocationOptions);
+			console.log('getLocalCurrentPosition position', position);
+			await setCurrentPosition(position);
+		} catch (e) {
+			console.log('getCurrentPosition', e);
+		}*/
+	
+		const position = await getLocalCurrentLocation(geolocationOptions);
+		console.log('getLocalCurrentPosition position', position);
+		await setCurrentPosition(position);
+
 	} else {
 		console.log('[geolocationService] Serviço de Geolocalização não está habilitado ou é suportado no navegador');
 	}

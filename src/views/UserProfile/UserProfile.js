@@ -55,6 +55,7 @@ const styles = {
 		marginBottom: "30px",
 	},
 
+	//Style Snackbar:
 	success: {
 		backgroundColor: green[600],
 	},
@@ -73,15 +74,18 @@ const styles = {
 		alignItems: 'center',
 	},
 
-	wrapper: {
-		margin: "1px",
-		position: 'relative',
-	},
+	//Style Save Button:
 	buttonProgress: {
 		color: lightBlue[500],
 		top: "10px",
 		right: "50%",
 		position: "relative",
+	},
+
+	//Other styles:
+	wrapper: {
+		margin: "1px",
+		position: 'relative',
 	},
 };
 

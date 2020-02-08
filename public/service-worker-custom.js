@@ -90,7 +90,7 @@ self.addEventListener('push', function(event) {
 	const notif = JSON.parse(event.data.text());
 	console.log('[ServiceWorker] Recebeu Notificação Push:', notif);
 
-	//TODO: Poderia utilizar um utilitário ou método do notificationManager, como 'displayNotification()'
+	//TODO: Poderia utilizar um utilitário ou método do notificationService, como 'displayNotification()'
 	const title = notif.title || BEE_MONITOR_DEFAULT_NOTIF_TITLE;
 	const options = {
 		body: notif.body || '',

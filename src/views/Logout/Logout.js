@@ -3,11 +3,11 @@ import React from "react";
 import { Switch, Redirect } from "react-router-dom";
 import { logout } from "../../services/auth";
 
-import * as notificationManager from '../../notificationManager';
+import * as notificationService from '../../services/notification';
 
 export default function Logout() {
 
-	notificationManager.terminate().then(logout);
+	notificationService.terminate().then(logout);
 
 	return (
 		<Switch>

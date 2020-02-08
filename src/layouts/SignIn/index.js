@@ -5,8 +5,9 @@ import Logo from "../../assets/bee-monitor-logo.png";
 import api from "../../services/api";
 import { login } from "../../services/auth";
 
-//TODO: Talvez mover o arquivo notificationManager para dentro de /services, e utilizar como se fosse um serviço
-import * as notificationManager from '../../notificationManager';
+//TODO: Talvez mover o arquivo notificationService para dentro de /services, e utilizar como se fosse um serviço
+import * as notificationService from '../../services/notification';
+import * as geolocationService from '../../services/geolocation';
 
 import { Form, Container } from "./styles";
 
@@ -29,7 +30,8 @@ class SignIn extends Component {
 				const response = await api.post("/bee-auth/api/v1/sessions", { email, password });
 
 				login(response.data.token);
-				notificationManager.init();
+				notificationService.init();
+				geolocationService.getCurrentPosition();
 
 				this.props.history.push("/app");
 			} catch (err) {

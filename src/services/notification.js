@@ -23,16 +23,16 @@ let isSubscribed = false;
 let swRegistration = null;
 
 async function initializeSubscription() {
-	console.log('[NotificationManager] Inicializando inscrições...');
+	console.log('[notificationService] Inicializando inscrições...');
 
 	// Get the subscription object
 	if(swRegistration) {
 		swRegistration.pushManager.getSubscription().then(subscription => {
 			isSubscribed = (subscription !== null);
 			if (isSubscribed) {
-				console.log('[NotificationManager] Usuário está inscrito.');
+				console.log('[notificationService] Usuário está inscrito.');
 			} else {
-				console.log('[NotificationManager] Usuário não está inscrito.');
+				console.log('[notificationService] Usuário não está inscrito.');
 				subscribeUser();
 			}
 		});
@@ -40,7 +40,7 @@ async function initializeSubscription() {
 }
 
 function subscribeUser() {
-	console.log('[NotificationManager - subscribeUser] Inscrevendo usuário no PushManager');
+	console.log('[notificationService - subscribeUser] Inscrevendo usuário no PushManager');
 	const applicationServerKey = urlB64ToUint8Array(applicationServerPublicKey);
 
 	// subscribe to the push service
@@ -48,22 +48,22 @@ function subscribeUser() {
 		userVisibleOnly: true,
 		applicationServerKey,
 	}).then(subscription => {
-		console.log('[NotificationManager - subscribeUser] Usuário inscrito:', subscription);
+		console.log('[notificationService - subscribeUser] Usuário inscrito:', subscription);
 		subscribeOnServer(subscription);
 		isSubscribed = true;
 
 	}).catch(err => {
 		if (Notification.permission !== 'granted') {
-			console.warn('[NotificationManager - subscribeUser] Permissão para apresentar notificações foi negada');
+			console.warn('[notificationService - subscribeUser] Permissão para apresentar notificações foi negada');
 		} else {
-			console.error('[NotificationManager - subscribeUser] Erro ao inscrever usuário. Motivo:', err);
+			console.error('[notificationService - subscribeUser] Erro ao inscrever usuário. Motivo:', err);
 		}
 	});
 
 }
 
 function unsubscribeUser() {
-	console.log('[NotificationManager - unsubscribeUser] Desinscrevendo usuário do PushManager');
+	console.log('[notificationService - unsubscribeUser] Desinscrevendo usuário do PushManager');
 	let subscription = null;
 
 	// Unsubscribe from the push service
@@ -74,17 +74,17 @@ function unsubscribeUser() {
 				return sub.unsubscribe();
 			}
 		}).catch(err => {
-			console.error('[NotificationManager - unsubscribeUser] Erro ao desinscrever usuário. Motivo:', err);
+			console.error('[notificationService - unsubscribeUser] Erro ao desinscrever usuário. Motivo:', err);
 		}).then(() => {
 			unsubscribeOnServer(subscription);
-			console.log('[NotificationManager - unsubscribeUser] Usuário desinscrito');
+			console.log('[notificationService - unsubscribeUser] Usuário desinscrito');
 			isSubscribed = false;
 		});
 	}
 }
 
 function unsubscribeOnServer(subscription) {
-	console.log('[NotificationManager] Atualizando desinscrição do Push Manager no servidor.');
+	console.log('[notificationService] Atualizando desinscrição do Push Manager no servidor.');
 
 	if (subscription) {
 		return fetch(`${SERVER_URL}/bee-notification/api/v1/notifications/unsubscribe`, {
@@ -98,7 +98,7 @@ function unsubscribeOnServer(subscription) {
 }
 
 function subscribeOnServer(subscription) {
-	console.log('[NotificationManager] Atualizando inscrição do Push Manager no servidor.');
+	console.log('[notificationService] Atualizando inscrição do Push Manager no servidor.');
 
 	// Here's where you would send the subscription to the application server
 	if (subscription) {
@@ -113,7 +113,7 @@ function subscribeOnServer(subscription) {
 }
 
 /*function displayNotification(notifMessage) {
-	console.log('[NotificationManager] Apresentando notificação com seguinte mensagem:', notifMessage);
+	console.log('[notificationService] Apresentando notificação com seguinte mensagem:', notifMessage);
 
 	// Display a Notification
 	if (Notification.permission == 'granted') {
@@ -142,33 +142,34 @@ function subscribeOnServer(subscription) {
 */
 
 export async function init() {
-	console.log('[NotificationManager] Inicializando...');
+	console.log('[notificationService] Inicializando...');
 
 	const doesBrowserSupportsNotifications = 'Notification' in window;
 	if (!doesBrowserSupportsNotifications) {
-		console.log('[NotificationManager] Este navegador não suporta notificações!');
+		console.log('[notificationService] Este navegador não suporta notificações!');
 		return;
 	}
 
 	try {
 		const notifPermission = await Notification.requestPermission();
-		console.log('[NotificationManager] Status da permissão de notificação:', notifPermission);
+		console.log('[notificationService] Status da permissão de notificação:', notifPermission);
 
 		swRegistration = await navigator.serviceWorker.ready;
-		console.log('[NotificationManager] ServiceWorker está pronto e ativo!', swRegistration);
+		console.log('[notificationService] ServiceWorker está pronto e ativo!', swRegistration);
 		initializeSubscription();
 
 	} catch (error) {
-		console.log('[NotificationManager] Falha ao inicializar gerenciador de notificações. Motivo:', error);
+		console.log('[notificationService] Falha ao inicializar gerenciador de notificações. Motivo:', error);
 	}
 }
 
 export async function terminate() {
-	console.log('[NotificationManager] Finalizando...');
+	console.log('[notificationService] Finalizando...');
 	unsubscribeUser();
 }
 
-const observeNotificationPermissions = (() => {
+// observeNotificationPermissions
+(() => {
 	if ('permissions' in navigator) {
 		navigator.permissions.query({ name: 'notifications' }).then(notificationPerm => {
 			notificationPerm.onchange = function () {

@@ -14,7 +14,7 @@ export default function Dashboard() {
 	const dashboardView = (
 		<Hidden>
 			<iframe
-				src="https://10.42.0.1/bee-grafana/d/m2T90j1Zz/bee-monitor?orgId=1&refresh=1h&from=1580167870772&to=1580772670772&var-colmeia=colmeia0001"
+				src="https://10.42.0.1/bee-grafana/d/m2T90j1Zz/bee-monitor?orgId&refresh=1h"
 				width="100%"
 				height={dashboardHeight}
 				frameBorder="0"

@@ -1,4 +1,3 @@
-import * as notificationManager from './notificationManager';
 
 export function register() {
 	if ('serviceWorker' in navigator) {

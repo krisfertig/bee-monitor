@@ -129,13 +129,13 @@ class UserProfile extends React.Component {
 
 	async componentDidMount() {
 		try {
-			const { data: { email, username, id } } = await api.get(`${BEE_AUTH_SERVICE}/v1/users`);
+			const { data } = await api.get(`${BEE_AUTH_SERVICE}/v1/users`);
 			this.setState({
-				email,
-				username,
+				email: data.email,
+				username: data.username,
 			});
 
-			await this.getUserProfileData(id);
+			await this.getUserProfileData(data.id);
 
 		} catch (err) {
 			//TODO: Ajustar mensagem de erro deste log
@@ -146,18 +146,14 @@ class UserProfile extends React.Component {
 	async getUserProfileData(userId) {
 		try {
 			const userProfileUrl = `${userProfilesAPIUrl}/${userId}`;
-			const { data: userProfile } = await api.get(userProfileUrl);
-			const {
-				first_name: firstName,
-				last_name: lastName,
-				user_role: userRole,
-				id: userProfileId } = userProfile;
+			const { data } = await api.get(userProfileUrl);
+			const userProfile = data;
 
 			this.setState({
-				firstName,
-				lastName,
-				userRole,
-				userProfileId,
+				firstName: userProfile.first_name,
+				lastName: userProfile.last_name,
+				userRole: userProfile.user_role,
+				userProfileId: userProfile.id,
 			});
 		} catch (err) {
 			console.error('Não foi possível requisitar os dados do perfil do usuário', err);
